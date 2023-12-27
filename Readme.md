@@ -4,11 +4,13 @@ The GuildAudits bootcamp assessment test will assess and establish individualsâ€
 
 ### Please follow the processes below to carry out the task and submission correctly.
 
+
+
 1. You are to fork this repository with the assessment
 2. Change the public visibility of the forked repo to private
-3. Add davidpius95 and deCyberghost as a contributor to this forked repo so we would have access to examine your submission.
+3. Add davidpius95 , deCyberghost and  as a contributor to this forked repo so we would have access to examine your submission.
 4. On completion, push to your forked repository.
-5. Use the submission link and drop your
+5. Use the submission link and drop your solution [sumbmission link](https://forms.gle/ZPpPCoNHKaSYs5HT7)
 
 ## FIRST ASSESSMENT
 
@@ -17,3 +19,4 @@ The first assessment examines your experience with building smart contracts.
 ## SECOND ASSESSMENT
 
 Attempt to solve the various stages in this [codebase](ctf-challenge/challenge.sol) as it examines your consistency to break vulnerable smart contract.
+
