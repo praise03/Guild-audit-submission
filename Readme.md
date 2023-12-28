@@ -10,7 +10,7 @@ The GuildAudits bootcamp assessment test will assess and establish individualsâ€
 2. Change the public visibility of the forked repo to private
 3. Add davidpius95 , deCyberghost and  as a contributor to this forked repo so we would have access to examine your submission.
 4. On completion, push to your forked repository.
-5. Use the submission link and drop your solution [sumbmission link](https://forms.gle/ZPpPCoNHKaSYs5HT7)
+5. Use the [sumbmission link](https://forms.gle/ZPpPCoNHKaSYs5HT7) and drop your solution. 
 
 ## FIRST ASSESSMENT
 
