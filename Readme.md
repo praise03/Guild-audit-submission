@@ -20,3 +20,5 @@ The first assessment examines your experience with building smart contracts.
 
 Attempt to solve the various stages in this [codebase](ctf-challenge/challenge.sol) as it examines your consistency to break vulnerable smart contract.
 
+### Deadline for submission is January 6, 2024.
+
