@@ -45,12 +45,18 @@ contract YieldContract is ERC20{
         //begin yield farming
         if(userDepositsInToken[token][msg.sender] > 0) {
             if(!withdrawYieldFarmingRewards(token)) revert WithdrawYieldFailed();
-            startTime[msg.sender] = block.timestamp;
         }
 
+        //begin generating yield token rewards
+        startTime[msg.sender] = block.timestamp;
+        
+        
         _approveBalancer(token, depositAmount);
+
+        //deposit user deposit into balancer pool and store balancerLp tokens recieved on behalf of user
         (uint256 amountReceivedbyPool, uint256 poolTokensReceived) = BalancerInterface(balancerAddress).addToPool(token, amountRecievedByYieldContract);
         
+        //actual amount received by balancer due to fee on transfer
         userDepositsInToken[token][msg.sender] += amountReceivedbyPool;
 
         userLPRewardFromToken[token][msg.sender] = poolTokensReceived;
@@ -67,6 +73,7 @@ contract YieldContract is ERC20{
 
         uint256 userLpTokens = userLPRewardFromToken[token][msg.sender];
 
+        //withdraw deposit from balancer + rewards;
         uint256 rewardsFromBalancer = BalancerInterface(balancerAddress).withdrawFromPool(token, amount, userLpTokens);
 
         // uint256 amountWithRewards = amount + rewardsFromBalancer;
@@ -77,6 +84,7 @@ contract YieldContract is ERC20{
         return rewardsFromBalancer;
     }
 
+    //@notice function to mint yield tokens to depositors
     function mint(address to, uint256 amount) internal {
         _mint(to, amount);
     }
@@ -90,6 +98,7 @@ contract YieldContract is ERC20{
         return true;
     }
 
+    //@dev returns rewards gained from staking considering the staking duration and amount deposited
     function getFarmingRewards(address user, address token) public view returns (uint256) {
         uint256 timePassed = (block.timestamp - startTime[user]) * 10e18;
         uint256 timeRate = timePassed / STAKING_RATE;
@@ -98,7 +107,7 @@ contract YieldContract is ERC20{
     }
 
 
-
+    //@notice approve balancer to spend yield contract tokens
     function _approveBalancer(address token, uint256 amount) internal {
         IERC20(token).approve(balancerAddress, amount);
     }

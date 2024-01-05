@@ -3,7 +3,7 @@
 pragma solidity ^0.8.20;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./TestMath.sol";
+import "./BalancerHelpers.sol";
 
 interface LPINTERFACE is IERC20{
     function mintTo(address to, uint256 amount) external;
@@ -113,7 +113,7 @@ contract BalancerPool is BalancerHelper {
 
     }
 
-    function calculateTokenWeights(address _tokenA, address _tokenB) public returns(uint256 weightA, uint256 weightB, uint256 totalWeight) {
+    function calculateTokenWeights(address _tokenA, address _tokenB) public view returns(uint256 weightA, uint256 weightB, uint256 totalWeight) {
         uint256 balanceA = IERC20(_tokenA).balanceOf(address(this));
         uint256 balanceB = IERC20(_tokenB).balanceOf(address(this));
 

@@ -62,7 +62,7 @@ contract BalancerToken is ERC20, Ownable{
     error NotMinter();
     error TransferNotSupported();
     
-    constructor() ERC20("BalancerLiquidityToken", "BLT"){
+    constructor() ERC20("BalancerLiquidityToken", "BLT") Ownable(msg.sender){
         
     }
 
@@ -78,9 +78,6 @@ contract BalancerToken is ERC20, Ownable{
         revert TransferNotSupported();
     }
 
-    function _transfer(address from, address to, uint256 value) internal override {
-        revert TransferNotSupported();
-    }
 
     function transferFrom(address, address, uint256) public virtual override returns (bool) {
         revert TransferNotSupported();
