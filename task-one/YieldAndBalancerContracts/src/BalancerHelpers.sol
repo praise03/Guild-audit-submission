@@ -24,21 +24,21 @@ contract BalancerHelper  {
     uint public constant BPOW_PRECISION = BONE / 10**10;
 
     function btoi(uint a)
-        public pure 
+        internal pure 
         returns (uint)
     {
         return a / BONE;
     }
 
     function bfloor(uint a)
-        public pure
+        internal pure
         returns (uint)
     {
         return btoi(a) * BONE;
     }
 
     function badd(uint a, uint b)
-        public pure
+        internal pure
         returns (uint)
     {
         uint c = a + b;
@@ -47,7 +47,7 @@ contract BalancerHelper  {
     }
 
     function bsub(uint a, uint b)
-        public pure
+        internal pure
         returns (uint)
     {
         (uint c, bool flag) = bsubSign(a, b);
@@ -56,7 +56,7 @@ contract BalancerHelper  {
     }
 
     function bsubSign(uint a, uint b)
-        public pure
+        internal pure
         returns (uint, bool)
     {
         if (a >= b) {
@@ -67,7 +67,7 @@ contract BalancerHelper  {
     }
 
     function bmul(uint a, uint b)
-        public pure
+        internal pure
         returns (uint)
     {
         uint c0 = a * b;
@@ -79,7 +79,7 @@ contract BalancerHelper  {
     }
 
     function bdiv(uint a, uint b)
-        public pure
+        internal pure
         returns (uint)
     {
         require(b != 0, "ERR_DIV_ZERO");
@@ -93,7 +93,7 @@ contract BalancerHelper  {
 
     // DSMath.wpow
     function bpowi(uint a, uint n)
-        public pure
+        internal pure
         returns (uint)
     {
         uint z = n % 2 != 0 ? a : BONE;
@@ -112,7 +112,7 @@ contract BalancerHelper  {
     // Use `bpowi` for `b^e` and `bpowK` for k iterations
     // of approximation of b^0.w
     function bpow(uint base, uint exp)
-        public pure
+        internal pure
         returns (uint)
     {
         require(base >= MIN_BPOW_BASE, "ERR_BPOW_BASE_TOO_LOW");
@@ -132,7 +132,7 @@ contract BalancerHelper  {
     }
 
     function bpowApprox(uint base, uint exp, uint precision)
-        public pure
+        internal pure
         returns (uint)
     {
         // term 0:

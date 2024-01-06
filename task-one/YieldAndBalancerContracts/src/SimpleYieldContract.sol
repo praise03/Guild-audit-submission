@@ -47,7 +47,7 @@ contract YieldContract is ERC20{
             if(!withdrawYieldFarmingRewards(token)) revert WithdrawYieldFailed();
         }
 
-        //begin generating yield token rewards
+        //begin/restart generating yield token rewards
         startTime[msg.sender] = block.timestamp;
         
         

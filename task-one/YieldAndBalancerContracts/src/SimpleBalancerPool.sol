@@ -18,7 +18,7 @@ contract BalancerPool is BalancerHelper {
     error TransferFailed();
 
     uint256 constant SWAP_FEE = 3;
-    uint256 constant POOL_FEE = 3;
+    uint256 constant POOL_FEE = 3e16;
     address immutable poolLiquidityToken;
 
     mapping(address => bool) public tokenPresent;
@@ -34,8 +34,9 @@ contract BalancerPool is BalancerHelper {
     function addToPool(address _token, uint256 amount)
         external
         returns (uint256, uint256)
-    {
+    {   
         IERC20 token = IERC20(_token);
+        //add token to our list of swappable tokens, if not present
         if(!tokenPresent[_token]) {
             tokenPresent[_token] = true;
             poolTokens.push(_token);
@@ -46,6 +47,7 @@ contract BalancerPool is BalancerHelper {
 
         uint256 tokenInBalance = token.balanceOf(address(this));
 
+        //due to fee on transfer of tokens
         uint256 tokenAmountRecieved = tokenInBalance - tokenBalanceBefore;
 
         uint256 poolSupply = IERC20(poolLiquidityToken).totalSupply();
@@ -53,8 +55,11 @@ contract BalancerPool is BalancerHelper {
         uint256 tokenWeightIn = getTokenWeight(_token);
         uint256 totalWeight = getTotalPoolBalance(); 
 
+        //balancer logic to calculate lp tokens received on token deposit
         uint256 poolLiquidityTokensReceived = calcPoolOutGivenSingleIn(tokenInBalance, tokenWeightIn, poolSupply, totalWeight, tokenAmountRecieved, POOL_FEE);
 
+
+        //mint balancer lp tokens to depositor
         LPINTERFACE(poolLiquidityToken).mintTo(msg.sender, poolLiquidityTokensReceived);
 
         userDepositsInToken[_token][msg.sender] += tokenAmountRecieved;
@@ -64,11 +69,14 @@ contract BalancerPool is BalancerHelper {
     function withdrawFromPool(address _token, uint256 amount, uint256 lpTokenAmount) external returns (uint256) {
         if(amount > userDepositsInToken[_token][msg.sender]) revert InsufficientBalance();
         if(lpTokenAmount == 0) revert ZeroAmount();
+        require(LPINTERFACE(poolLiquidityToken).balanceOf(msg.sender) >= lpTokenAmount, "Insufficient Liquidity Token Balance" );
 
+        //subtract amount from user deposits
         userDepositsInToken[_token][msg.sender] -= amount;
 
         uint256 feesAccuredFromToken = feesAccured[_token];
 
+        //using user lp token amount calculate user's share of protocol fees
         uint256 usershare = (lpTokenAmount * feesAccuredFromToken) / LPINTERFACE(poolLiquidityToken).totalSupply();
 
         uint256 amountWithRewards = usershare + amount;
@@ -110,7 +118,6 @@ contract BalancerPool is BalancerHelper {
         if(!IERC20(_tokenOut).transfer(msg.sender, tokenOutEstimate)) revert TransferFailed();
 
         return tokenOutEstimate; 
-
     }
 
     function calculateTokenWeights(address _tokenA, address _tokenB) public view returns(uint256 weightA, uint256 weightB, uint256 totalWeight) {
